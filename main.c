@@ -1,16 +1,13 @@
-// main.c
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
 #include "hr_system.h"
 
 int main(int argc, char *argv[]) {
-    // 设置locale以支持中文输出（兼容Mac和其他平台）
     setlocale(LC_ALL, "");
 
-    HRSystem* hr = create_hr_system(4, 17); // 初始容量4，哈希表大小17（质数）
+    HRSystem* hr = create_hr_system(4, 17);
 
-    // 加载数据
     load_from_file(hr, "employees.txt");
 
     int choice, id;
@@ -25,10 +22,10 @@ int main(int argc, char *argv[]) {
         printf("请选择: ");
         
         if (scanf("%d", &choice) != 1) {
-            while (getchar() != '\n'); // 清空输入缓冲
+            while (getchar() != '\n');
             continue;
         }
-        while (getchar() != '\n'); // 清空剩余输入
+        while (getchar() != '\n');
 
         switch (choice) {
             case 1:
@@ -39,7 +36,6 @@ int main(int argc, char *argv[]) {
                 printf("请输入 ID、姓名、性别、出生日期、部门: ");
                 char input[200];
                 if (fgets(input, sizeof(input), stdin) != NULL) {
-                    // 移除换行符
                     input[strcspn(input, "\n")] = 0;
                     if (sscanf(input, "%d %49s %49s %49s %49s", &id, name, sex, birth, dept) == 5) {
                         add_employee(hr, id, name, sex, birth, dept);
@@ -63,7 +59,6 @@ int main(int argc, char *argv[]) {
 
             case 4:
                 printf("👋 再见！\n");
-                // 保存数据
                 save_to_file(hr, "employees.txt");
                 destroy_hr_system(hr);
                 return 0;
