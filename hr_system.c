@@ -4,7 +4,6 @@
 #include <string.h>
 #include "hr_system.h"
 
-// 哈希函数（简单取模）
 unsigned int hash_func(int id, int table_size) {
     return id % table_size;
 }
@@ -24,7 +23,7 @@ HRSystem* create_hr_system(int init_capacity, int hash_size) {
     return hr;
 }
 
-// 辅助：扩容员工数组
+// 扩容员工数组
 int resize_employees(HRSystem* hr) {
     int new_cap = hr->capacity * 2;
     Employee* new_arr = (Employee*)realloc(hr->employees, new_cap * sizeof(Employee));
@@ -106,7 +105,7 @@ int delete_employee(HRSystem* hr, int id) {
         pp = &((*pp)->next);
     }
 
-    // 从员工数组中删除：用最后一个元素覆盖（保持连续）
+    // 从员工数组中删除
     if (target_index != hr->count - 1) {
         hr->employees[target_index] = hr->employees[hr->count - 1];
 
@@ -151,7 +150,6 @@ void print_all_employees(HRSystem* hr) {
 void destroy_hr_system(HRSystem* hr) {
     if (!hr) return;
 
-    // 释放哈希表
     for (int i = 0; i < hr->table_size; i++) {
         HashNode* curr = hr->hash_table[i];
         while (curr) {
@@ -162,7 +160,6 @@ void destroy_hr_system(HRSystem* hr) {
     }
     free(hr->hash_table);
 
-    // 释放员工数组
     free(hr->employees);
     free(hr);
 }
@@ -199,13 +196,12 @@ int load_from_file(HRSystem* hr, const char* filename) {
 
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        // 移除换行符
+
         line[strcspn(line, "\n")] = '\0';
 
         int id;
         char name[50], sex[50], birth[50], dept[50];
 
-        // 使用strtok分隔字段，更兼容Mac和其他平台
         char *token = strtok(line, ";");
         if (!token || (id = atoi(token)) <= 0) continue;
 
@@ -229,8 +225,7 @@ int load_from_file(HRSystem* hr, const char* filename) {
         strncpy(dept, token, 49);
         dept[49] = '\0';
 
-        // 检查是否还有多余字段（确保正好5个）
-        if (strtok(NULL, ";")) continue; // 如果有更多字段，跳过
+        if (strtok(NULL, ";")) continue;
 
         add_employee(hr, id, name, sex, birth, dept);
     }
