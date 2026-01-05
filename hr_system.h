@@ -11,23 +11,20 @@ typedef struct _Employee {
     char dept[50];
 } Employee;
 
-// 哈希表节点（处理冲突用链地址法）
 typedef struct HashNode {
-    Employee* emp;           // 指向员工数据
+    Employee* emp;
     struct HashNode* next;
 } HashNode;
 
-// 人事系统结构
 typedef struct {
-    Employee* employees;     // 动态员工数组
-    int count;               // 当前员工数
-    int capacity;            // 当前容量
+    Employee* employees;
+    int count; 
+    int capacity; 
 
-    HashNode** hash_table;   // 哈希索引表
-    int table_size;          // 哈希表大小
+    HashNode** hash_table;
+    int table_size;
 } HRSystem;
 
-// 函数声明
 HRSystem* create_hr_system(int init_capacity, int hash_size);
 int add_employee(HRSystem* hr, int id, const char* name, const char* sex, const char* birth,const char* dept);
 int delete_employee(HRSystem* hr, int id);
