@@ -8,7 +8,6 @@ unsigned int hash_func(int id, int table_size) {
     return id % table_size;
 }
 
-// 创建人事系统
 HRSystem* create_hr_system(int init_capacity, int hash_size) {
     HRSystem* hr = (HRSystem*)calloc(1, sizeof(HRSystem));
     if (!hr) return NULL;
@@ -23,7 +22,6 @@ HRSystem* create_hr_system(int init_capacity, int hash_size) {
     return hr;
 }
 
-// 扩容员工数组
 int resize_employees(HRSystem* hr) {
     int new_cap = hr->capacity * 2;
     Employee* new_arr = (Employee*)realloc(hr->employees, new_cap * sizeof(Employee));
@@ -33,9 +31,8 @@ int resize_employees(HRSystem* hr) {
     return 1;
 }
 
-// 添加员工
 int add_employee(HRSystem* hr, int id, const char* name, const char* sex, const char* birth, const char* dept) {
-    // 检查ID是否已存在
+
     for (int i = 0; i < hr->count; i++) {
         if (hr->employees[i].id == id) {
             printf("❌ 员工ID %d 已存在！\n", id);
@@ -43,7 +40,7 @@ int add_employee(HRSystem* hr, int id, const char* name, const char* sex, const 
         }
     }
 
-    // 扩容检查
+
     if (hr->count >= hr->capacity) {
         if (!resize_employees(hr)) {
             printf("❌ 内存不足，无法添加员工！\n");
@@ -51,7 +48,6 @@ int add_employee(HRSystem* hr, int id, const char* name, const char* sex, const 
         }
     }
 
-    // 添加到员工数组
     Employee* emp = &hr->employees[hr->count];
     emp->id = id;
     strncpy(emp->name, name, 49);
@@ -64,7 +60,6 @@ int add_employee(HRSystem* hr, int id, const char* name, const char* sex, const 
     emp->dept[49] = '\0';
     hr->count++;
 
-    // 更新哈希索引：插入到哈希桶头部
     unsigned int idx = hash_func(id, hr->table_size);
     HashNode* node = (HashNode*)malloc(sizeof(HashNode));
     node->emp = emp;
@@ -77,7 +72,7 @@ int add_employee(HRSystem* hr, int id, const char* name, const char* sex, const 
 
 // 删除员工
 int delete_employee(HRSystem* hr, int id) {
-    // 先找到员工
+
     Employee* target = NULL;
     int target_index = -1;
     for (int i = 0; i < hr->count; i++) {
@@ -92,7 +87,7 @@ int delete_employee(HRSystem* hr, int id) {
         return 0;
     }
 
-    // 从哈希表中移除节点
+
     unsigned int hidx = hash_func(id, hr->table_size);
     HashNode** pp = &hr->hash_table[hidx];
     while (*pp) {
@@ -105,11 +100,9 @@ int delete_employee(HRSystem* hr, int id) {
         pp = &((*pp)->next);
     }
 
-    // 从员工数组中删除
     if (target_index != hr->count - 1) {
         hr->employees[target_index] = hr->employees[hr->count - 1];
 
-        // ⚠️ 重要：更新被移动员工的哈希索引！
         int moved_id = hr->employees[target_index].id;
         unsigned int moved_hidx = hash_func(moved_id, hr->table_size);
         HashNode* node = hr->hash_table[moved_hidx];
@@ -127,7 +120,6 @@ int delete_employee(HRSystem* hr, int id) {
     return 1;
 }
 
-// 打印所有员工
 void print_all_employees(HRSystem* hr) {
     if (hr->count == 0) {
         printf("📭 当前无员工\n");
@@ -146,7 +138,6 @@ void print_all_employees(HRSystem* hr) {
     }
 }
 
-// 释放内存
 void destroy_hr_system(HRSystem* hr) {
     if (!hr) return;
 
@@ -164,7 +155,6 @@ void destroy_hr_system(HRSystem* hr) {
     free(hr);
 }
 
-// 保存到文件
 int save_to_file(HRSystem* hr, const char* filename) {
     FILE* file = fopen(filename, "w");
     if (!file) {
@@ -186,7 +176,6 @@ int save_to_file(HRSystem* hr, const char* filename) {
     return 1;
 }
 
-// 从文件加载
 int load_from_file(HRSystem* hr, const char* filename) {
     FILE* file = fopen(filename, "r");
     if (!file) {
