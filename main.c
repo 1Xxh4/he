@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         printf("1. list\n");
         printf("2. add\n");
         printf("3. del\n");
-        printf("4. exit\n");
+        printf("4. quit\n");
         printf("请选择: ");
         
         if (scanf("%d", &choice) != 1) {
