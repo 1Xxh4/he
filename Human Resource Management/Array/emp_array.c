@@ -13,7 +13,6 @@ int capacity = 0;  // 当前分配的容量（以 Employee 为单位）
 int ensure_capacity(int needed) {
     if (needed <= capacity) return 1;
 
-    // 策略：按 1.5 倍或至少 needed 扩容（避免频繁 realloc）
     int new_capacity = (capacity > 0) ? (capacity + capacity / 2) : 1;
     if (new_capacity < needed) new_capacity = needed;
  
@@ -36,7 +35,7 @@ void emp_load() {
 
     emp_count = 0;
     capacity = 0;
-    free(employees); // 释放旧内存（首次为 NULL 也安全）
+    free(employees); 
     employees = NULL;
 
     Employee temp;
@@ -138,8 +137,6 @@ void emp_del() {
     emp_count--;
 
     printf("员工 [%s] 已删除。\n", deleted_name);
-
-    // 可选：当使用率过低时缩容（此处省略，避免频繁 realloc）
 }
 
 void menu() {
