@@ -3,8 +3,10 @@
 #include <string.h>
 #include "emp_list.h"
 
-int count = 0; /* 定义此变量主要用于员工动态编号编号的处理
-                   （才疏学浅只能想到这个方法） */
+Node head = NULL;
+Node tail = NULL;
+int count = 0;
+
 
 // 尾插法(优化版) - 加入tail指针使时间复杂度从 O(n) -> O(1)
 int insert(Employee val)
@@ -24,6 +26,7 @@ int insert(Employee val)
         tail->next = q;
         tail = q;
     }
+    count++;
     return 1;
 }
 
@@ -39,8 +42,6 @@ void emp_list()
     printf("%-4s %-15s %-6s %-12s %-20s\n", "编号", "姓名", "性别", "出生日期", "部门");
     printf("---------------------------------------------\n");
     Node p = head;
-    while (p != NULL)
-    {
         for (int i = 0; i < count; i++)
         {
             printf("%-4d %-15s %-6s %-12s %-20s\n",
@@ -52,7 +53,6 @@ void emp_list()
             p = p->next;
         }
         printf("---------------------------------------------\n\n");
-    }
 }
 
 // 每次运行时 自动遍历员工数据
@@ -153,7 +153,7 @@ void emp_del()
     {
         // 删除头节点
         head = current->next;
-        if (head = NULL)
+        if (head == NULL)
         {
             tail = NULL;
         }

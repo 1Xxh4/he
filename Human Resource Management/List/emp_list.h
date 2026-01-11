@@ -1,6 +1,8 @@
 #ifndef EMP_LIST_H
 #define EMP_LIST_H
 
+#include <stdio.h>
+
 typedef struct
 {
     char name[50];
@@ -9,15 +11,15 @@ typedef struct
     char dept[50];
 } Employee;
 
-typedef struct node *Node;
-static Node head = NULL;
-static Node tail = NULL;
-
-struct node
+typedef struct node
 {
     Employee val;
-    Node next;
-};
+    struct node *next;
+} *Node;
+
+extern Node head;
+extern Node tail;
+extern int count;
 
 int insert(Employee val);
 void emp_list();
