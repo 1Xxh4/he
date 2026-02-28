@@ -1,0 +1,6 @@
+list
+add 张三 男 2000-01-01 技术部
+list
+del 1
+list
+exit
